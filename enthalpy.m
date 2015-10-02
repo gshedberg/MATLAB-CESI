@@ -1,6 +1,5 @@
 function [h, h_s] = enthalpy(varargin) % enthalpy (h) and sensible enthalpy(h_s), if species and flow are provided it returns H (total enthalpy(kW)) and H_s Sensible enthalpy (kW).
 global Ru
-Ru = .821;
 T = varargin{1};
 X =[];
 if length(varargin)>1
@@ -55,9 +54,9 @@ for i=1:1:n
     end
 end
 h = h*Ru;
-h_s = [h(:,1)+7395, h(:,2)+10916, h(:,3)+38861, h(:,4), h(:,5)+23881, h(:,6), h(:,7)];
+h_s = [h(:,1)+74850, h(:,2)+110530, h(:,3)+393520, h(:,4), h(:,5)+241820, h(:,6), h(:,7)];
 
 if ~isempty(X);
-    h = sum(h.*X,2)*N;
-    h_s = sum(h_s.*X,2)*N;
+    h = sum(h.*X,2).*N;
+    h_s = sum(h_s.*X,2).*N;
 end
