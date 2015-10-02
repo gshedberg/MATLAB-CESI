@@ -1,6 +1,6 @@
 function Cp = SpecHeat(varargin) % Specific heat of 7 species, if species fractions are provided it returns weighted specific heat of the flow
+%Returns specific heat in kJ/kmol*K
 global Ru
-Ru = 8.314;
 T = varargin{1};
 X =[];
 if length(varargin)>1
