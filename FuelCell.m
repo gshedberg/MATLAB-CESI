@@ -1,4 +1,4 @@
-function [N_out, x_out, T_anode, W_out,n_CH4] = FuelCell(V_fc, nO2,T_air, T_fuel)
+function [Tout,Xout,Nout, W_out, n_CH4] = FuelCell(V_fc, TXNin, Tfuel)
 global R Na e Cv Cp F;
 R = 8.314;
 Na = 6.022*10^23;
@@ -7,6 +7,9 @@ Cv  = .7180;
 Cp = 1.0050;
 F = 96485;  
 
+Tin = TXNin(:,1);
+Xin = TXNin(:,2:8);
+Nin = TXNin(:,9);
 n = 4;
 erxn1 = 1;
 erxn2 = .6;
@@ -35,33 +38,33 @@ R3 = ((x_fuel(1)*n_fuel))*erxn3;
 R2 = (x_fuel(2)*(n_fuel)+R3)*erxn2;
 R1 =(i/(4000*F))*erxn1;
 
-N_out = n_fuel + nO2 - R1 + 2*R3;
+Nout = n_fuel + nO2 - R1 + 2*R3;
 
-x_out(1) = (x_fuel(1)*n_fuel -R3)/N_out;
-x_out(2) = ((x_fuel(2)*n_fuel  )-R2+R3)/N_out;
-x_out(3) = ((x_fuel(3)*n_fuel )+R2)/N_out;
-x_out(4) = ((x_fuel(4)*n_fuel )-(2*R1)+R2+(3*R3))/N_out;
-x_out(5) = ((x_fuel(5)*n_fuel )-R2-(R3)+(2*R1))/N_out;
-x_out(6) = ((x_fuel(6)*n_fuel ))/N_out;
-x_out(7) = ((x_fuel(7)*n_fuel + nO2)-R1)/N_out;
-
-
+Xout(1) = (x_fuel(1)*n_fuel -R3)/Nout;
+Xout(2) = ((x_fuel(2)*n_fuel  )-R2+R3)/Nout;
+Xout(3) = ((x_fuel(3)*n_fuel )+R2)/Nout;
+Xout(4) = ((x_fuel(4)*n_fuel )-(2*R1)+R2+(3*R3))/Nout;
+Xout(5) = ((x_fuel(5)*n_fuel )-R2-(R3)+(2*R1))/Nout;
+Xout(6) = ((x_fuel(6)*n_fuel ))/Nout;
+Xout(7) = ((x_fuel(7)*n_fuel + nO2)-R1)/Nout;
 
 
-[~,H_air] = enthalpy(T_air, [0 0 0 0 0 0 1], nO2);
-[~,H_fuel] =  enthalpy(T_fuel, x_fuel, n_fuel);
+
+
+[~,H_air] = enthalpy(Tin,Xin,Nin);
+[~,H_fuel] =  enthalpy(Tfuel, x_fuel, n_fuel);
 
 W_out = V_fc*(i/1000);
 H_out = H_fuel+H_air-(R3*hrxn3)- W_out -(R1*hrxn1)-(R2*hrxn2);
 
-T_anode = 1200;
+Tout = 1200;
 T_error = 100;
 while T_error > .1
-   H_guess = enthalpy(T_anode, x_out, N_out);
-   Cp = SpecHeat(T_anode, x_out);
+   H_guess = enthalpy(Tout, Xout, Nout);
+   Cp = SpecHeat(Tout, Xout);
 
-   T_error = (H_out-H_guess)/(Cp*N_out);
-   T_anode = T_anode+T_error;
+   T_error = (H_out-H_guess)/(Cp*Nout);
+   Tout = Tout+T_error;
 end
 
 

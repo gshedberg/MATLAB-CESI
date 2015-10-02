@@ -1,19 +1,19 @@
-function [T_out] = heatex(n_air, T_in)
+function [T_out] = heatex(TXNin)
 
-[~,~,P2] = compress(1,30,.05);
-[~, ~, ~, T_perm] = ITM(P2, 15, n_air);
-x_in = [0 0 0 0 0 0 1];
-H_out = n_air*(enthalpy(T_in) - enthalpy(T_perm));
+Tin = TXNin(:,1);
+Xout = TXNin(:,2:8);
+Nout = TXNin(:,9);
+[~,H4] = enthalpy(Tin,Xout,Nout); %Enthalpy coming in to Heat Exchanger
+
+
 T_guess = 300;
 T_error = 100;
 while T_error > .1
-    H_guess = enthalpy(T_guess, x_in, n_air);
-    Cp = SpecHeat(T_guess, x_in);
+    H_guess = enthalpy(T_guess, Xout, Nout);
+    Cp = SpecHeat(T_guess, Xout);
     
-    T_error = (H_guess - H_out)/(Cp*n_air);
+    T_error = (H_guess - H4)/(Cp*Nout);
     T_out = T_guess+T_error;
 end
-T_out = sum(T_out(1:7)/7);
-
 
 
