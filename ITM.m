@@ -6,14 +6,12 @@ Cp = 1.0050;
 gam = Cp/Cv;
 T2 = TXNin(:,1);
 Nin = TXNin(:,9);
-oneVec = ones(1,length(P2));
+
 x_feed =TXNin(:,2:8); %Feed composition from compressor
 P_perm = P2*x_feed(7)/P_ratio; %permeate pressure (Air products)
 
-[~,H2] = enthalpy(T2,x_feed,Nin);
+[~,H2] = enthalpy(T2,x_feed,Nin);       %Enthalpy in from compressor
 
-% P = P2/P_ratio;
-% P_perm = (P_feed.*X_feed)/7;
 Rt = 1-(1-x_feed(7))*P_perm/(x_feed(7)*(P2-P_perm)); %Theoretcial O2 recovery (Air Prod)
 
 Re = .75 * Rt; %(Actual O2 Recovery)
@@ -28,9 +26,9 @@ Nout = ((1-Re)*(Xair(6))*Nin*(.02897))+((1-Re)*(Xair(7))*Nin*(.02897)); %Molar f
 
 T3s = ((1/P_ratio).^(1-gam))*T2; %Isentropic Expansion through ITM
 
-[~,H3s] = enthalpy(T3s, Xair, Nout); %Isentropic Enthalpy
+[~,H3s] = enthalpy(T3s, Xair, Nout); %Isentropic Enthalpy out 
 
-H3 = (H3s-H2)/(Re+H2);
+H3 = (H3s-H2)/(Re+H2);      %actual enthalpy out
 
 T_guess = 700;
 T_error = 100;

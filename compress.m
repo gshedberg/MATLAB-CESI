@@ -1,6 +1,6 @@
 function [Wc, T_out ,Xout,Nout, P2] = compress(TXNin, nc, Pr, Pin)
 global Cv Cp
-oneVec = ones(1,length(Pr));
+
 Cv  = .7180;
 Cp = 1.0050;
 gam = Cp/Cv;

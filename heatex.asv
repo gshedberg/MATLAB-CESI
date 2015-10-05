@@ -2,7 +2,7 @@ function [T_out] = heatex(TXNin)
 
 Tin = TXNin(:,1);       %Temp in from ITM
 Xout = TXNin(:,2:8);       %Composition O2 from ITM
-Nout = TXNin(:,9);      %FLow rate O2 from ITM
+Nout = TXNin(:,9);      %FLow rate O2 from 
 [~,H3] = enthalpy(Tin,Xout,Nout); %Enthalpy coming in to Heat Exchanger
 
 
