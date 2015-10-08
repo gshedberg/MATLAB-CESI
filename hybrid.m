@@ -29,7 +29,9 @@ Q34 = H3-H4;
 
 [Wc2, T5, X5, N5, P5] = compress([T4, X4, N4], CompEff, Pr2, P3);
 
-[T6,X6,N6, W_fc, FC_fuel] = FuelCell(V_fc, [T5,X5,N5], Tfuel);
+T6 = 1000;
+
+[X6,N6, W_fc, FC_fuel] = FuelCell(V_fc, [T5,X5,N5], T6);
 
 [X8, CombustFuel, N8, T8] = combust_mf([T7,X7,N7], [T6,X6,N6], TIT);
 

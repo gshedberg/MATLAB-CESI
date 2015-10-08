@@ -47,7 +47,7 @@ while error > .1
     R2 = (x_fuel(2)*(n_fuel)+R3)*erxn2;
     R1 =(i/(4000*F));
 
-    Nout = n_fuel + Nin - R1 + 2*R3;        %Total Nout of anode 
+    Nout = n_fuel + Nin - R1 + 2*R3;        %Initial Nout 
 
     Xout(1) = (x_fuel(1)*n_fuel-R3)/Nout;
     Xout(2) = ((x_fuel(2)*n_fuel)-R2+R3)/Nout;
@@ -57,7 +57,7 @@ while error > .1
     Xout(6) = ((x_fuel(6)*n_fuel))/Nout;
     Xout(7) = ((x_fuel(7)*n_fuel + Nin)-R1)/Nout;
     
-    n_recirc = (.05*n_CH4)/Xout(5);       %Flow coming back for reformation
+    n_recirc = (hrxn3*n_CH4)/Xout(5);       %Flow coming back for reformation
     X_recirc = [n_CH4/(n_CH4+n_recirc),Xout(2:7)/((n_CH4+Nout)/Nout)];       %Composition of reformation
     
 
