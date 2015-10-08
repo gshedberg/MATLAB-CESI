@@ -1,4 +1,4 @@
-function [T_out] = heatex(TXNin)
+function [T_guess] = heatex(TXNin)
 
 Tin = TXNin(:,1);       %Temp in from ITM
 Xout = TXNin(:,2:8);       %Composition O2 from ITM
@@ -13,7 +13,7 @@ while T_error > .1
     Cp = SpecHeat(T_guess, Xout);
     
     T_error = (H_guess - H3)/(Cp*Nout);
-    T_out = T_guess+T_error;
+    T_guess = T_guess+T_error;
 end
 
 

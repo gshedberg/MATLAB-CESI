@@ -1,4 +1,4 @@
-function [Wt,T_out, N_out] = turbine(TXNin, EffTurb, Pr)
+function [Wt,T_guess, N_out] = turbine(TXNin, EffTurb, Pr)
 global Cv Cp F
 
 Cv  = .7180;
@@ -30,12 +30,12 @@ T_error = 100;
 while T_error > .1      %Reiteration to calculate temperature out
     [~,H_guess] = enthalpy(T_guess, X_out, N_out);
     T_error = (H_guess - Hout)/(Cp*N_out);
-    T_out = T_guess + T_error; 
+    T_guess = T_guess + T_error; 
 end
 
 % Wt = N_out*((H_fuel+n_fuel)*(H_air-n_air_out))*((1+F)/90000)*H_out;
 
-Wt = N_out *Cp*(Tin-Tout);       %Isentropic expansion power generation
+Wt = N_out *Cp*(Tin-T_guess);       %Isentropic expansion power generation
 end
 
     

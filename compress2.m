@@ -1,4 +1,4 @@
-function [Wc, T_out, X_out, N_out, P5] = compress2(TXNin, nc, Pr, Pin)
+function [Wc, T_guess, X_out, N_out, P5] = compress2(TXNin, nc, Pr, Pin)
 global Cv Cp
 
 Cv  = .7180;
@@ -21,10 +21,10 @@ T_error = 100;
 while abs(T_error) > .1
     [~,H_guess] = enthalpy(T_guess, Xout, Nout);
     T_error = (H5 - H_guess)/(Cp*Nout);
-    T_out = T_guess + T_error; %Reiteration to calculate temperature out
+    T_guess = T_guess + T_error; %Reiteration to calculate temperature out
 end
 
-Wc = Nout*Cp*(T_out-T1); %power taken for compression
+Wc = Nout*Cp*(T_guess-T1); %power taken for compression
 end
 
  

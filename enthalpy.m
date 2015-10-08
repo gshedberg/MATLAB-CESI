@@ -1,6 +1,5 @@
 function [h, h_s] = enthalpy(varargin) % enthalpy (h) and sensible enthalpy(h_s), if species and flow are provided it returns H (total enthalpy(kW)) and H_s Sensible enthalpy (kW).
-global Ru
-Ru = .273;
+Ru = 8.314;
 T = varargin{1};
 X =[];
 if length(varargin)>1
