@@ -1,18 +1,10 @@
-function [Xout, n_fuel, Nout, Tout] = combust_mf(TXNin_air, TXNin_anode, TIT)
+function [Xout, n_fuel, Nout, Tout] = combust_mf(TXNin_air, TXNin_fuel, TIT)
 
 erxn1 = 1;
-erxn2 = .7;
+erxn2 = 1;
 erxn3 = 1;
 
-h = enthalpy(T_air+200);
-
-Tin_air = TXNin_air(:,1);
-Xin_air = TXNin_air(:,2:8);
-Nin_air = TXNin_air(:,9);
-
-Tin_fuel = TXNin_anode(:,1);
-Xin_fuel = TXNin_anode(:,2:8);
-Nin_fuel = TXNin_anode(:,9);
+h = enthalpy(TXNin_air(:,1)+200);
 
 % Reactions occuring in combustor %
 hrxn1 = 2*h(5)+h(2)-h(1)-1.5*h(7); %Ch4 + 1.5 O2 --> CO + 2 H2O
@@ -49,7 +41,7 @@ if T_noFuel<TIT
         Xout(7) = ((x_noFuel(7)*N_noFuel + x_fuel(7)*n_guess)-(1.5*R1)-(.5*R2)-(.5*R3))/Nout;
         
         [~,H_fuel] = enthalpy(T_fuel,x_fuel,n_guess);
-        H_out = H_noFuel+H_fuel+(R1*hrxn1)+(R2*hrxn2)+(R3*hrxn3);
+        H_out = H_noFuel+H_fuel-(R1*hrxn1)-(R2*hrxn2)-(R3*hrxn3);
         
         Tout = TIT;
         T_error = 100;

@@ -15,7 +15,7 @@ P_perm = P2*x_feed(7)/P_ratio; %permeate pressure (Air products)
 
 Rt = 1-(1-x_feed(7))*P_perm/(x_feed(7)*(P2-P_perm)); %Theoretcial O2 recovery (Air Prod)
 
-Re = .75 * Rt; %(Actual O2 Recovery)
+Re = .5 * Rt; %(Actual O2 Recovery)
 
 NO2 = Re*x_feed(7)*Nin; %Molar Flow O2
 
@@ -23,7 +23,7 @@ x_np = x_feed*(1-Re)./(1-Re*x_feed); %Composition of Non-Permeate
 
 Xair = (x_np);
 
-Nout = ((1-Re)*(Xair(6))*Nin*(.02897))+((1-Re)*(Xair(7))*Nin*(.02897)); %Molar flow of Non-Permeate
+Nout = Nin-NO2; %Molar flow of Non-Permeate
 Tout = TXNin(1);
 TO2 = TXNin(1);
 
