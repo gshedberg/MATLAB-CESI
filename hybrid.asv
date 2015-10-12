@@ -11,9 +11,11 @@ T1 = TXNin(:,1);  %Initial conditions into hybrid
 X1 = TXNin(:,2:8);
 N1 = TXNin(:,9);
 Pin = 101;
-LHVfuel = 8e5; %Lower heating value of CH4
+LHVfuel = 754256; %Lower heating value of CH4
 
 [Wc1, T2 ,X2,N2, P2] = compress([T1,X1,N1], CompEff, Pr, Pin);
+
+[T, Xout, Nout] = combustITM(T2,X2, TXNin_fuel)
 
 [T7, X7, N7, N3, T3] = ITM([T2,X2,N2], P2, P_ratio);
 

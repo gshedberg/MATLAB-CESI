@@ -1,4 +1,4 @@
-function [Tout, Xout, Nout] = combust(TXNin_air, TXNin_fuel)
+function [Tout, Xout, Nout] = combustITM(TXNin_air, TXNin_fuel)
 
 erxn1 = 1;
 erxn2 = 1;
@@ -38,7 +38,7 @@ Xout(7) = ((TXNin_fuel(:,8)*Nin_fuel + TXNin_air(:,8)*Nin_air)-((1.5*R1)-(.5*R2)
 
 H_out = H_air + H_fuel-(R1*hrxn1)-(R2*hrxn2)-(R3*hrxn3);
 
-Tout = 1000;
+Tout = 500;
 T_error = 100;
 while abs(T_error) > 1
    [~,H_guess] = enthalpy(Tout, Xout, Nout);
@@ -47,8 +47,3 @@ while abs(T_error) > 1
    T_error = (H_out-H_guess)/(Cp*Nout);
    Tout = Tout+T_error;
 end
-
-
-
-
-
