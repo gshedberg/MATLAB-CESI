@@ -58,7 +58,7 @@ while abs(error) > .002
     [~,H_recirc] =  enthalpy(Tdesign, Xout, Nout*RecircPerc);
     
     Qreform = hrxn2*R2+hrxn3*R3;
-    Qgen = -hrxn1*R1- V_fc*I/1000;
+    Qgen = -hrxn1*R1- V_fc.*I/1000;
 
     %energy balance: Fuel in+ oxidant in+recirculation in - reforming cooling+Qgen - flow out
     Qimbalance = H_Oxidant+Hfuel+H_recirc-Qreform+Qgen-Hout;
@@ -74,7 +74,7 @@ end
 
 Nout = Nout*(1-RecircPerc);
 
-W_out = V_fc*(I/1000);          %Total power out based on Voltage and current
+W_out = V_fc.*(I/1000);          %Total power out based on Voltage and current
 LHV = 754256;
 Eff_FC = W_out/(n_fuel*LHV);
 
