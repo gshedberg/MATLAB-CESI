@@ -56,5 +56,5 @@ end
 Cp = Cp*Ru;
 
 if ~isempty(X);
-    Cp = sum(Cp*X',2);
+    Cp = sum(Cp.*X,2);
 end

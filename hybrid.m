@@ -1,4 +1,4 @@
-function [Efficiency, W_net,W_fc,W_gt, T_out, X8,N_out] = hybrid(TXNin, Pr, P_ratio, TIT,V_fc)
+function [Efficiency, W_net,W_fc,W_gt, T_out, X8,N_out] = hybrid(TXNin, Pr, P_ITMperm, TIT,V_fc)
 global  R F Na e 
 R = 8.314;
 Na = 6.022*10^23;
@@ -15,12 +15,13 @@ LHVfuel = 8e5; %Lower heating value of CH4
 
 [Wc1, T2 ,X2,N2, P2] = compress([T1,X1,N1], CompEff, Pr, Pin);
 
-[T7, X7, N7, N3, T3] = ITM([T2',X2,N2], P2, P_ratio);
+[T7, X7, N7, N3, T3, Q_preheat] = ITM([T2,X2,N2], P2, P_ITMperm);
 
-X3= [0 0 0 0 0 0 1];
-P3=P2./P_ratio;
+X3 = zeros(length(T1),7);
+X3(:,7) = 1;
+P3=P_ITMperm;
 Pr2 = (Pr*Pin+25)./P3;
-T4 = 300;
+T4 = T3*0+300;
 
 X4 = X3;
 N4 = N3;
@@ -30,9 +31,11 @@ Q34 = H3-H4;
 
 [Wc2, T5, X5, N5, P5] = compress([T4, X4, N4], CompEff, Pr2, P3);
 
-T6 = 1023;
-
-[X6,N6, W_fc, FC_fuel, Eff_FC] = FuelCell(V_fc,T6, [T5',X5,N5], [300,1 0 0 0 0 0 0 0],2);
+T6 = zeros(100,1)+1023;
+TXfuel = zeros(length(T1),8);
+TXfuel(:,1) = 300;
+TXfuel(:,2) = 1;
+[X6,N6, W_fc, FC_fuel, Eff_FC] = FuelCell(V_fc,T6, [T5,X5,N5], TXfuel,2);
 
 LHVanode = 38917.23;
 
@@ -45,5 +48,5 @@ W_net = W_fc + W_gt;
 % Q_CH4 = 8e5; %kJ/kmol of CH4
 LHVcombust = 0;
 % Efficiency = W_net/((N6*LHVfuel)+(N8*LHVcombust));
-Efficiency = W_net/((FC_fuel+CombustFuel)*LHVfuel);
+Efficiency = W_net/((Q_preheat + FC_fuel+CombustFuel)*LHVfuel);
 end

@@ -1,37 +1,39 @@
-function [Tout, Xair, Nout, NO2, TO2] = ITM(TXNin, P2, P_ratio)
-global F 
-F = 96400;
-Ru = 8.314;
-Tavg = (TXNin(:,1:100)+P_ratio.^(1-1/1.4).*TXNin(:,1:100))/2;
-Cp = SpecHeat(Tavg, TXNin(:,2:8));
-gam = Cp./(Cp-Ru);
-T2 = TXNin(:,1:100);
-Nin = TXNin(:,108);
 
-x_feed =TXNin(:,101:107); %Feed composition from compressor
+function [Tout, X_np, Nout, NO2, TO2, Q_preheat] = ITM(TXNin, Pin,P_ITMperm)
+T = TXNin(:,1);
+X_feed =TXNin(:,2:8); %Feed composition from compressor
+Nin = TXNin(:,9);
 
-oneVec = ones(1,100);
 
-X_feed = oneVec'*x_feed;
+[~,Hin] = enthalpy(T,X_feed,Nin);       %Enthalpy in from compressor
 
-% trans = (P2'.*X_feed(:,7));
+% P = X_feed(:,7).*(P-P_perm);
 
-P_perm = ((P2'.*X_feed(:,7))'./P_ratio); %permeate pressure (Air products)
+% X = (1-(1-X_feed(:,7))).*P_perm;
 
-[~,H2] = enthalpy(T2,x_feed,Nin);       %Enthalpy in from compressor
+Rt = 1-(1-X_feed(:,7)).*P_ITMperm./(X_feed(:,7).*(Pin-P_ITMperm));%Theoretcial O2 recovery (Air Prod)
 
-Rt = (1-(1-X_feed(1,7)).*P_perm)./(X_feed(1,7).*(P2-P_perm)); %Theoretcial O2 recovery (Air Prod)
+% Rt = (X./P)*10; 
 
-Re = .5 * Rt; %(Actual O2 Recovery)
+Re = max(0,.5 * Rt); %(Actual O2 Recovery)
 
-NO2 = Re*X_feed(1,7)*Nin; %Molar Flow O2
-
-x_np = x_feed'*(1-Re)./(1-Re'*x_feed)'; %Composition of Non-Permeate
-
-Xair = (oneVec*x_np');
+NO2 = Re.*X_feed(:,7).*Nin; %Molar Flow O2
 
 Nout = Nin-NO2; %Molar flow of Non-Permeate
-Tout = TXNin(1);
-TO2 = TXNin(1);
+
+for i = 1:1:7    
+    if i ==7
+        X_np(:,i) = (X_feed(:,i).*Nin - NO2)./Nout;%Composition of Non-Permeate
+    else
+        X_np(:,i) = (X_feed(:,i).*Nin )./Nout;%Composition of Non-Permeate
+    end
+end
+
+Tout = T*0 + 800+273;
+TO2 = Tout;
+
+[~,H_preheated] = enthalpy(Tout,X_feed,Nin);
+
+Q_preheat = H_preheated-Hin;
 
 end
