@@ -5,9 +5,9 @@ F = 96485;
 h = enthalpy(Tdesign);
 erxn2 = .6; % Water gas shift effectiveness of reaction
 erxn3 = 1; % Steam reformation of methane effectiveness of reaction
-hrxn1 = 2*h(5)-2*h(4)-h(7); %2H2 + O2 -->  2H2O
-hrxn2 = h(3)+h(4)-h(2)-h(5); %CO + H20 --> CO2 + H2 
-hrxn3 = 3*h(4)+h(2)-h(1)-h(5); %CH4+H2O --> CO + 3H2
+hrxn1 = 2*h(:,5)-2*h(:,4)-h(:,7); %2H2 + O2 -->  2H2O
+hrxn2 = h(:,3)+h(:,4)-h(:,2)-h(:,5); %CO + H20 --> CO2 + H2 
+hrxn3 = 3*h(:,4)+h(:,2)-h(:,1)-h(:,5); %CH4+H2O --> CO + 3H2
 
 I = 4*1000*F*(TXNoxidant(:,8).*TXNoxidant(:,9));  %SOFC current X # of Cells based on oxidant flow and 100% oxidant utilization
 [~, H_Oxidant] = enthalpy(TXNoxidant(:,1),TXNoxidant(:,2:8),TXNoxidant(:,9));
@@ -20,6 +20,7 @@ XanodeIn = zeros(length(Tdesign),7);
 XanodeIn(:,1) = 1/(S2Cdesign+1);
 XanodeIn(:,5) = S2Cdesign/(S2Cdesign+1);
 NanodeIn = n_fuel*(S2Cdesign+1);
+RecircPerc = .3;
 error = util*0+1;
 while min(abs(error)) > .002 
 
@@ -28,7 +29,7 @@ while min(abs(error)) > .002
     
     [~,Hfuel] = enthalpy(TXfuel(:,1), TXfuel(:,2:8),n_fuel);
    
-
+    NanodeIn = n_fuel/(1-RecircPerc.*(1+2*XanodeIn(:,1)*erxn3));
 
 
     R3 = (XanodeIn(:,1).*NanodeIn)*erxn3;
@@ -65,10 +66,10 @@ while min(abs(error)) > .002
     Qgen = -hrxn1.*R1- (V_fc.*I)/1000;
 
     %energy balance: Fuel in+ oxidant in+recirculation in - reforming cooling+Qgen - flow out
-    Qimbalance = H_Oxidant+Hfuel+H_recirc+Qreform+Qgen-Hout;
+    Qimbalance = H_Oxidant+Hfuel+H_recirc-Qreform+Qgen-Hout;
     
     CH4error = Qimbalance./hrxn3;
-    CH4eqivelant = (I/(4000*F))./util;
+    CH4eqivelant = (I/(8000*F))./util;
     
     utilNew = util.*(1-CH4error./CH4eqivelant);
     error = util-utilNew;
@@ -79,8 +80,8 @@ end
 Nout = Nout.*(1-RecircPerc);
 
 W_out = V_fc.*(I/1000);          %Total power out based on Voltage and current
-LHV = 754256;
-Eff_FC = W_out/(n_fuel*LHV);
+LHV = zeros(100,1)+8e5;
+Eff_FC = W_out./(n_fuel.*LHV);
 
 
 
