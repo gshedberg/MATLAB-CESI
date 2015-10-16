@@ -7,19 +7,20 @@ erxn3 = 1;
 h = enthalpy(TXNin_air(:,1)+200);
 
 % Reactions occuring in combustor %
-hrxn1 = 2*h(5)+h(2)-h(1)-1.5*h(7); %Ch4 + 1.5 O2 --> CO + 2 H2O
-hrxn2 = h(3)-h(2)-.5*h(7); %CO + .5 O2 --> CO2 
-hrxn3 = h(5)-h(4)-.5*h(7); %H2 + .5 O2 -->  H2O
+hrxn1 = 2*h(:,5)+h(:,2)-h(:,1)-1.5*h(:,7); %Ch4 + 1.5 O2 --> CO + 2 H2O
+hrxn2 = h(:,3)-h(:,2)-.5*h(:,7); %CO + .5 O2 --> CO2 
+hrxn3 = h(:,5)-h(:,4)-.5*h(:,7); %H2 + .5 O2 -->  H2O
 
 
 [T_noFuel, x_noFuel, N_noFuel] = combust(TXNin_air, TXNin_fuel);
-n_fuel = 0;
+n_fuel = zeros(100,1);
 Xout = x_noFuel;
 Tout = T_noFuel;
 Nout = N_noFuel;
 if T_noFuel<TIT
     Q_hv = 8e5;
-    x_fuel = [1 0 0 0 0 0 0];
+    x_fuel = zeros(100,length(x_noFuel));
+    x_fuel(:,1) = 1;
     T_fuel = 500;
     [~,H_TIT] = enthalpy(TIT, x_noFuel, N_noFuel);
     [~,H_noFuel] = enthalpy(T_noFuel, x_noFuel, N_noFuel);
