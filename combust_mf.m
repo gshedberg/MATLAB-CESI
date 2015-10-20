@@ -13,14 +13,14 @@ hrxn3 = h(:,5)-h(:,4)-.5*h(:,7); %H2 + .5 O2 -->  H2O
 
 
 [T_noFuel, x_noFuel, N_noFuel] = combust(TXNin_air, TXNin_fuel);
-n_fuel = zeros(100,1);
+n_fuel = zeros(length(TXNin_air(:,1)),1);
 Xout = x_noFuel;
 Tout = T_noFuel;
 Nout = N_noFuel;
 if T_noFuel<TIT
     Q_hv = 8e5;
-    x_fuel = zeros(100,length(x_noFuel));
-    x_fuel(:,1) = 1;
+    x_fuel = zeros(length(x_noFuel),1);
+%     x_fuel(:,1) = 1;
     T_fuel = 500;
     [~,H_TIT] = enthalpy(TIT, x_noFuel, N_noFuel);
     [~,H_noFuel] = enthalpy(T_noFuel, x_noFuel, N_noFuel);
