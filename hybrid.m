@@ -1,9 +1,4 @@
 function [Efficiency,Eff_FC,Eff_GT,W_net,W_fc,W_gt,T_out,X8,N_out] = hybrid(TXNin, Pr, P_ITMperm, TIT,V_fc)
-global  R F Na e 
-R = 8.314;
-Na = 6.022*10^23;
-e = 1.602 * 10^-19;
-F = 96485; 
 TurbEff = .87;
 CompEff = .82;
 
@@ -38,6 +33,7 @@ TXfuel = zeros(length(T1),8);
 TXfuel(:,1) = 300;
 TXfuel(:,2) = 1;
 
+% [V_fc] = nernst(Pr,T6);
 [X6,N6, W_fc, FC_fuel, Eff_FC] = FuelCell(V_fc,T6, [T5,X5,N5], TXfuel,2);
 
 
@@ -45,20 +41,19 @@ TXfuel(:,2) = 1;
 LHVCO = 303000;
 LHVH2 = 240420;
 
-Error = FC_fuel.*LHVfuel-W_fc-N6.*(X6(:,1).*LHVfuel+X6(:,2).*LHVCO+X6(:,4).*LHVH2);
+% [~,HfuelIn] = enthalpy(300,TXfuel(2:8),FC_fuel);
+% [~,HfuelOut] = enthalpy(T6,TXfuel(2:8),FC_fuel);
+% Error = FC_fuel.*LHVfuel-W_fc-N6.*(X6(:,1).*LHVfuel+X6(:,2).*LHVCO+X6(:,4).*LHVH2)+HfuelIn-HfuelOut;
 
-LHVanode = zeros(100,1)+LHVCO+LHVH2;
+LHVanode = zeros(length(T1),1)+LHVfuel.*X6(:,1)+LHVCO.*X6(:,2)+LHVH2.*X6(:,4);
 
-TIT = zeros(100,1)+TIT;
+TIT = zeros(length(T1),1)+TIT;
 
 [X8, CombustFuel, N8, T8] = combust_mf([T7,X7,N7], [T6,X6,N6], TIT);
 
 [Wt,T_out, N_out] = turbine([T8,X8,N8], TurbEff, 1./Pr);
 W_gt = Wt-Wc1-Wc2;
-Eff_GT = W_gt./((N6.*LHVanode)+(CombustFuel.*LHVfuel)+Q_preheat);
+Eff_GT = (Wt-Wc1)./((N6.*LHVanode)+(CombustFuel.*LHVfuel)+Q_preheat);
 W_net = W_fc + W_gt;
-% Q_CH4 = 8e5; %kJ/kmol of CH4
-LHVcombust = 0;
-% Efficiency = W_net/((N6*LHVfuel)+(N8*LHVcombust));
+
 Efficiency = W_net./((FC_fuel+CombustFuel).*LHVfuel+Q_preheat);
-end

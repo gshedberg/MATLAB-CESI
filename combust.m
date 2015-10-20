@@ -38,7 +38,7 @@ Xout(:,7) = ((TXNin_fuel(:,8).*Nin_fuel + TXNin_air(:,8).*Nin_air)-((1.5*R1)-(.5
 
 H_out = H_air + H_fuel-(R1.*hrxn1)-(R2.*hrxn2)-(R3.*hrxn3);
 
-Tout = zeros(100,1)+1000;
+Tout = zeros(length(Tin_air),1)+1000;
 T_error = 100;
 while abs(T_error) > 1
    [~,H_guess] = enthalpy(Tout, Xout, Nout);
