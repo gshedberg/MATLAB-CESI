@@ -1,9 +1,4 @@
 function [Efficiency,Eff_FC,Eff_GT,W_net,W_fc,W_gt,T_out,X8,N_out] = hybrid(TXNin, Pr, P_ITMperm, TIT,V_fc)
-global  R F Na e 
-R = 8.314;
-Na = 6.022*10^23;
-e = 1.602 * 10^-19;
-F = 96485; 
 TurbEff = .87;
 CompEff = .82;
 
@@ -38,6 +33,7 @@ TXfuel = zeros(length(T1),8);
 TXfuel(:,1) = 300;
 TXfuel(:,2) = 1;
 
+% [V_fc] = nernst(Pr,T6);
 [X6,N6, W_fc, FC_fuel, Eff_FC] = FuelCell(V_fc,T6, [T5,X5,N5], TXfuel,2);
 
 
