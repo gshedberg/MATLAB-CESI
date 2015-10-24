@@ -15,9 +15,9 @@ Rt = 1-(1-X_feed(:,7)).*P_ITMperm./(X_feed(:,7).*(Pin-P_ITMperm));%Theoretcial O
 
 % Rt = (X./P)*10; 
 
-Re = max(0,.5 * Rt); %(Actual O2 Recovery)
+R_actual = max(0,.5 * Rt); %(Actual O2 Recovery)
 
-NO2 = Re.*X_feed(:,7).*Nin; %Molar Flow O2
+NO2 = R_actual.*X_feed(:,7).*Nin; %Molar Flow O2
 
 Nout = Nin-NO2; %Molar flow of Non-Permeate
 
