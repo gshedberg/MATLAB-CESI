@@ -34,7 +34,7 @@ TXfuel(:,1) = 300;
 TXfuel(:,2) = 1;
 
 [V_fc] = nernst(Pr,T6,V_loss);
-[X6,N6, W_fc, FC_fuel, Eff_FC] = FuelCell(V_fc,T6, [T5,X5,N5], TXfuel,2);
+[X6,N6, W_fc, FC_fuel, Eff_FC] = FuelCell(V_fc,T6,[T5,X5,N5],TXfuel,2);
 
 
 

@@ -1,6 +1,6 @@
-Pr = linspace(25,25)'; % Compressor pressure ratio
+Pr = linspace(10,10)'; % Compressor pressure ratio
 P_ITMperm = linspace(50,50)'; %ITM back pressure in kPa
-V_loss = linspace(.6,.9)'; %Fuel cell voltage
+V_loss = linspace(.05,.25)'; %Fuel cell voltage
 
 
 % Pr = 15; % Compressor pressure ratio

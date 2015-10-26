@@ -1,12 +1,12 @@
 Pr = linspace(5,25)'; % Compressor pressure ratio
 P_ITMperm = linspace(50,50)'; %ITM back pressure in kPa
-V_guess = linspace(.9,.9)'; %Fuel cell voltage
-
+V_loss = linspace(.1501,.1501)'; %Fuel cell voltage
+TIT = 1200;
 % 
 % Pr = 10; % Compressor pressure ratio
 % P_ITMperm = 50; %ITM back pressure in kPa
 % V_fc = .9;
-vectorLength = max([length(Pr), length(P_ITMperm),length(V_guess)]);
+vectorLength = max([length(Pr), length(P_ITMperm),length(V_loss)]);
 
 TXNin = zeros(vectorLength,9);
 TXNin(:,1) = 300;
@@ -16,7 +16,7 @@ for i =1:1:7
 end
 TXNin(:,9) = .5;
 
-[Efficiency,Eff_FC,Eff_GT,W_net,W_fc,W_gt,T_out,X8,N_out,V_fc] = hybrid(TXNin, Pr, P_ITMperm, 1200,V_guess);
+[Efficiency,Eff_FC,Eff_GT,W_net,W_fc,W_gt,T_out,X8,N_out,V_fc] = hybrid(TXNin, Pr, P_ITMperm, TIT,V_loss);
 
 figure(1)
 title('Net Power Comparison')
@@ -51,11 +51,11 @@ ylabel(hAx(2),'Efficiency of Gas Turbine')
 hLine1.LineStyle = '--';
 hLine2.LineStyle = ':';
 
-figure(5)
-[hAx,hLine1,hLine2] = plotyy(V_fc,Efficiency,V_fc,W_fc);
-xlabel('Fuel Cell Output Voltage')
-ylabel(hAx(1),'Efficiency')
-ylabel(hAx(2),'W_fc')
-hLine1.LineStyle = '--';
-hLine2.LineStyle = ':';
-
+% figure(5)
+% [hAx,hLine1,hLine2] = plotyy(V_fc,Efficiency,V_fc,W_fc);
+% xlabel('Fuel Cell Output Voltage')
+% ylabel(hAx(1),'Efficiency')
+% ylabel(hAx(2),'W_fc')
+% hLine1.LineStyle = '--';
+% hLine2.LineStyle = ':';
+% 

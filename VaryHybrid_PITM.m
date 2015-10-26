@@ -1,6 +1,6 @@
 Pr = linspace(15,15)'; % Compressor pressure ratio
 P_ITMperm = linspace(10,50)'; %ITM back pressure in kPa
-V_fc = linspace(.9,.9)'; %Fuel cell voltage
+V_fc = linspace(.1501,.1501)'; %Fuel cell voltage
 
 vectorLength = max([length(Pr), length(P_ITMperm),length(V_fc)]);
 
