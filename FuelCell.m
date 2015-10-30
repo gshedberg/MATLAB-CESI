@@ -71,12 +71,17 @@ while max(abs(error)) > .0002
         end
         
    end
-
-    Qreform = hrxn2.*R2+hrxn3.*R3;
-    Qgen = -hrxn1.*R1- (V_fc.*I)/1000;
-
+%          Qgenguess = zeros(length(errorR),1)+10957.0;
+%          Qrefguess = zeros(length(errorR),1)+6836.6;
+%          errorQ = 100;
+%          while max(abs(errorQ))>10
+            Qreform = hrxn2.*R2+hrxn3.*R3;
+            Qgen = -hrxn1.*R1- (V_fc.*I)/1000;
+%             errorQ = Qgen - Qreform;
+%             Qgenguess = Qgen;
+%             Qrefguess = Qreform;
+%          end
     %energy balance: Fuel in+ oxidant in+recirculation in - reforming cooling+Qgen - flow out
-    
     Qimbalance = H_Oxidant+Hfuel+H_recirc-Qreform+Qgen-Hout;
     
     CH4error = Qimbalance./hrxn3;

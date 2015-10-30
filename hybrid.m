@@ -1,4 +1,4 @@
-function [Efficiency,Eff_FC,Eff_GT,W_net,W_fc,W_gt,T_out,X8,N_out] = hybrid(TXNin, Pr, P_ITMperm, TIT,V_fc)
+function [Efficiency,Eff_FC,Eff_GT,W_net,W_fc,W_gt,T_out,X8,N_out,V_fc] = hybrid(TXNin, Pr, P_ITMperm, TIT,V_loss)
 TurbEff = .87;
 CompEff = .82;
 
@@ -7,7 +7,7 @@ X1 = TXNin(:,2:8);
 N1 = TXNin(:,9);
 Pin = 101;
 
-vectorLength = max([length(Pr), length(P_ITMperm),length(V_fc)]);
+vectorLength = max([length(Pr), length(P_ITMperm),length(V_loss)]);
 LHVfuel = zeros(vectorLength,1)+8e5; %Lower heating value of CH4
 
 [Wc1, T2 ,X2,N2, P2] = compress([T1,X1,N1], CompEff, Pr, Pin);
@@ -33,8 +33,8 @@ TXfuel = zeros(length(T1),8);
 TXfuel(:,1) = 300;
 TXfuel(:,2) = 1;
 
-% [V_fc] = nernst(Pr,T6);
-[X6,N6, W_fc, FC_fuel, Eff_FC] = FuelCell(V_fc,T6, [T5,X5,N5], TXfuel,2);
+[V_fc] = nernst(Pr,T6,V_loss);
+[X6,N6, W_fc, FC_fuel, Eff_FC] = FuelCell(V_fc,T6,[T5,X5,N5],TXfuel,2);
 
 
 
