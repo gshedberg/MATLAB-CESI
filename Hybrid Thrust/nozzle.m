@@ -1,0 +1,1 @@
+function [Tout, Xout, Nout, vout] = nozzle(TXNnp,TXNin, Pin, vin, n_noz)
